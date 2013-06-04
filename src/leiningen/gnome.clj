@@ -34,8 +34,8 @@
                                        "stylesheet.css"])
         ;; TODO: use verbose nested :builds-style for :cljsbuild config
         project (-> project
-                    (update-in [:cljsbuild :source-path] #(or % "src"))
-                    (update-in [:cljsbuild :compiler :output-to] #(or % js)))]
+                    (update-in [:cljsbuild :builds :compiler :source-path] #(or % "src"))
+                    (update-in [:cljsbuild :builds :compiler :output-to] #(or % js)))]
     (cljs/cljsbuild project "once")
     (spit metadata (metadata-for project))
     ;; TODO: honor :source-paths?
