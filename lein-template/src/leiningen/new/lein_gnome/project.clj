@@ -4,7 +4,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]]
-  :plugins [[lein-gnome "0.1.0-SNAPSHOT"]]
+  :plugins [[lein-gnome "0.1.0-SNAPSHOT"]
+            [lein-cljsbuild "0.3.2"]]
   :cljsbuild {:builds {:main {:source-paths ["src"]
                               :notify-command ["notify-send"]
                               :compiler {:output-to "target/main.js"

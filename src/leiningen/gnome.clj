@@ -2,7 +2,6 @@
   (:refer-clojure :exclude [compile])
   (:require [clojure.java.io :as io]
             [clojure.java.shell :as sh]
-            [leiningen.cljsbuild :as cljs]
             [leiningen.help :as help]
             [leiningen.core.main :as main]
             [cheshire.core :as json]))
