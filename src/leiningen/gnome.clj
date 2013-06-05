@@ -34,7 +34,7 @@
 
 ;; TODO Sometimes gnome-shell crashes on restart from this
 (defn restart [project & args]
-  (sh/sh "pkill" "--signal" "SIGHUP" "gnome-shell"))
+  (sh/sh "pkill" "-x" "--signal" "SIGHUP" "gnome-shell"))
 
 (defn gnome
   "Operate on Gnome Shell extensions.
