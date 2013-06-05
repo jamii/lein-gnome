@@ -19,7 +19,6 @@
                 :uuid (uuid project)}))
 
 ;; TODO add 'uninstall/clean' command
-;; TODO add 'link' command for development
 
 (defn install [project & args]
   (let [install-dir (format "%s/.local/share/gnome-shell/extensions/%s"
