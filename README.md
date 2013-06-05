@@ -18,12 +18,11 @@ $ tree
 ├── hello.cljs
 └── stylesheet.css
 1 directory, 3 files
-$ lein gnome compile
+$ lein cljsbuild once
 [...]
 Compiling ClojureScript.
 Compiling "/tmp/myextension/target/extension/extension.js" from "src"...
 Successfully compiled "[...]/extension.js" in 6.107488105 seconds.
-Wrote extension: target/extension
 $ lein gnome install
 Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.com directory.
 Press Alt+F2 r ENTER to reload.
