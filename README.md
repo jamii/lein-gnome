@@ -28,7 +28,7 @@ Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.co
 Press Alt+F2 r ENTER to reload.
 ```
 
-Note that as of Gnome Shell 3.8.2, if your group name (example.com) does not have at least one period in it your extension will not be recognised.
+Note that as of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
 Coming soon: a repl.
 
