@@ -12,7 +12,7 @@
                                            "y_fill" false
                                            "track_hover" true)))
 
-(def icon (js/imports.gi.St.Icon. (js-obj "icon_name" "system-run-symbolic"
+(def icon (js/imports.gi.St.Icon. (js-obj "icon_name" "system-run"
                                           "style_class" "system-status-icon")))
 
 (defn hide-hello []
@@ -34,11 +34,8 @@
                             "onComplete" hide-hello))))
 
 (defn init []
-  (let [icon (js/imports.gi.St.Icon.
-              (js-obj "icon_name" "system-run"
-                      "style_class" "system-status-icon"))]
-    (.set_child button icon)
-    (.connect button "button-press-event" show-hello)))
+  (.set_child button icon)
+  (.connect button "button-press-event" show-hello))
 
 (defn enable []
   (.. main -panel -_rightBox (insert_child_at_index button 0)))
