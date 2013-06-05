@@ -25,12 +25,16 @@ Compiling "/tmp/myextension/target/extension/extension.js" from "src"...
 Successfully compiled "[...]/extension.js" in 6.107488105 seconds.
 $ lein gnome install
 Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.com directory.
-Press Alt+F2 r ENTER to reload.
+Use `lein gnome restart` to pick up changes
 ```
 
-Note that as of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
-
 The `hello.cljs` file is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
+
+# Gotchas
+
+As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
+
+If you use restart your gnome-shell too many times in a given period gdm will get upset and kill your session.
 
 Coming soon: a repl.
 
