@@ -4,26 +4,32 @@ Bringing the magic of ClojureScript to the desktop via Gnome Shell extensions.
 
 ## Usage
 
-Put `[lein-gnome "0.1.0-SNAPSHOT"]` into the `:plugins` vector of your project.clj.
+Put `lein-gnome/lein-template` in your profile:
 
-    $ lein new lein-gnome myextension example.com
-    $ cd myextension/
-    $ tree
-    .
-    ├── project.clj
-    └── src
-        ├── hello.cljs
-        └── stylesheet.css
-    1 directory, 3 files
-    $ lein gnome compile
-    [...]
-    Compiling ClojureScript.
-    Compiling "/tmp/myextension/target/extension/extension.js" from "src"...
-    Successfully compiled "[...]/extension.js" in 6.107488105 seconds.
-    Wrote extension: target/extension
-    $ lein gnome install
-    Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.com directory.
-    Press Alt+F2 r ENTER to reload.
+``` bash
+$ cat ~/.lein/profiles.clj
+{:user {:plugins [[lein-gnome/lein-template "0.1.0-SNAPSHOT"]]}}
+$ lein new lein-gnome myextension example.com
+$ cd myextension/
+$ tree
+.
+├── project.clj
+└── src
+├── hello.cljs
+└── stylesheet.css
+1 directory, 3 files
+$ lein gnome compile
+[...]
+Compiling ClojureScript.
+Compiling "/tmp/myextension/target/extension/extension.js" from "src"...
+Successfully compiled "[...]/extension.js" in 6.107488105 seconds.
+Wrote extension: target/extension
+$ lein gnome install
+Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.com directory.
+Press Alt+F2 r ENTER to reload.
+```
+
+Note that as of Gnome Shell 3.8.2, if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
 Coming soon: a repl.
 

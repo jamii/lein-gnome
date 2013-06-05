@@ -7,46 +7,37 @@
             [leiningen.core.main :as main]
             [cheshire.core :as json]))
 
+(defn shell-version [project]
+  (get-in project [:gnome-shell :supported-versions]))
+
 (defn uuid [project]
   (format "%s@%s" (:name project) (:group project)))
 
-(defn out-dir [project]
-  (str (io/file (:target-path project) "extension")))
+(defn metadata [project]
+  (json/encode {:name (:name project)
+                :description (:description project)
+                :shell-version (shell-version project)
+                :uuid (uuid project)}))
 
-(defn metadata-for [project]
-  (json/encode (assoc (select-keys project [:name :description :shell-version])
-                 :uuid (uuid project))))
+;; TODO add 'uninstall/clean' command
+;; TODO add 'link' command for development
 
 (defn install [project & args]
   (let [install-dir (format "%s/.local/share/gnome-shell/extensions/%s"
                             (System/getProperty "user.home") (uuid project))]
     (.mkdirs (io/file install-dir))
-    (doseq [file (.listFiles (io/file (out-dir project)))]
-      (io/copy file (io/file install-dir (.getName file))))
-    (println "Copied extension to" install-dir "directory.")
+    (spit (io/file install-dir "metadata.json") (metadata project))
+    (io/copy (io/file (get-in project [:gnome-shell :extension]))
+             (io/file install-dir "extension.js"))
+    (io/copy (io/file (get-in project [:gnome-shell :stylesheet]))
+             (io/file install-dir "stylesheet.css"))
+    (println "Installed extension to" install-dir)
     (println "Press Alt+F2 r ENTER to reload.")))
-
-(defn compile [project & args]
-  (let [out (out-dir project)
-        [js metadata stylesheet] (map (comp str (partial io/file out))
-                                      ["extension.js"
-                                       "metadata.json"
-                                       "stylesheet.css"])
-        ;; TODO: use verbose nested :builds-style for :cljsbuild config
-        project (-> project
-                    (update-in [:cljsbuild :builds :compiler :source-path] #(or % "src"))
-                    (update-in [:cljsbuild :builds :compiler :output-to] #(or % js)))]
-    (cljs/cljsbuild project "once")
-    (spit metadata (metadata-for project))
-    ;; TODO: honor :source-paths?
-    (io/copy (io/file (:root project) "src" "stylesheet.css") (io/file stylesheet))
-    (main/info "Wrote extension:" out)))
 
 (defn gnome
   "Operate on Gnome Shell extensions.
 
-Subtasks: compile and and install."
+Subtasks: install"
   [project & [task args]]
-  (cond (= task "compile") (apply compile project args)
-        (= task "install") (apply install project args)
+  (cond (= task "install") (apply install project args)
         :else (help/help "gnome")))
