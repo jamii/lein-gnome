@@ -30,12 +30,17 @@
     (io/copy (io/file (get-in project [:gnome-shell :stylesheet]))
              (io/file install-dir "stylesheet.css"))
     (println "Installed extension to" install-dir)
-    (println "Press Alt+F2 r ENTER to reload.")))
+    (println "Use `lein gnome restart` to pick up changes")))
+
+;; TODO Sometimes gnome-shell crashes on restart from this
+(defn restart [project & args]
+  (sh/sh "pkill" "--signal" "SIGHUP" "gnome-shell"))
 
 (defn gnome
   "Operate on Gnome Shell extensions.
 
-Subtasks: install"
+Subtasks: install restart"
   [project & [task args]]
   (cond (= task "install") (apply install project args)
+        (= task "restart") (apply restart project args)
         :else (help/help "gnome")))
