@@ -30,6 +30,8 @@ Press Alt+F2 r ENTER to reload.
 
 Note that as of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
+The `hello.cljs` file is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
+
 Coming soon: a repl.
 
 ## License
