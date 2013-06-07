@@ -32,9 +32,12 @@
     (println "Installed extension to" install-dir)
     (println "Use `lein gnome restart` to pick up changes")))
 
+(defn eval-in-shell [code]
+  (sh/sh "dbus-send" "--session" "--type=method_call" "--dest=org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell.Eval" (str "string:" code)))
+
 ;; TODO Sometimes gnome-shell crashes on restart from this
 (defn restart [project & args]
-  (sh/sh "pkill" "-x" "--signal" "SIGHUP" "gnome-shell"))
+  (eval-in-shell "global.reexec_self()"))
 
 (defn gnome
   "Operate on Gnome Shell extensions.

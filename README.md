@@ -34,8 +34,6 @@ The `hello.cljs` file is a direct port of the example extension created by `gnom
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
-If you use restart your gnome-shell too many times in a given period gdm will get upset and kill your session.
-
 Coming soon: a repl.
 
 ## License
