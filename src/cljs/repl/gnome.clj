@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [cljs.repl :as repl]
             [cljs.closure :as cljsc]
-            [clj-http.client :as client]
+            [org.httpkit.client :as client]
             [cemerick.piggieback :as piggieback]))
 
 (declare evaluate)
@@ -19,7 +19,7 @@
 
 (defn evaluate [repl-env filename line code]
   (let [body (str {:filename filename :line line :code code})
-        response (client/post (repl-url repl-env) {:body body})]
+        response @(client/post (repl-url repl-env) {:body body :as :text})]
     (if (= 200 (:status response))
       (read-string (:body response))
       {:status :error :value response})))

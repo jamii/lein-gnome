@@ -5,5 +5,5 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[cheshire "4.0.0"]
                  [com.cemerick/piggieback "0.0.4"]
-                 [clj-http "0.7.2"]]
+                 [http-kit "2.1.2"]]
   :eval-in-leiningen true)
