@@ -1,8 +1,7 @@
 (ns cljs.repl.gnome
-  (:require [clojure.java.io :as io]
+  (:require [org.httpkit.client :as client]
             [cljs.repl :as repl]
             [cljs.closure :as cljsc]
-            [org.httpkit.client :as client]
             [cemerick.piggieback :as piggieback]))
 
 (declare evaluate)
@@ -42,13 +41,6 @@
     (load this ns url))
   (-tear-down [this]
     (tear-down this)))
-
-(defn load-resource
-  "Load a JS file from the classpath into the REPL environment."
-  [repl-env filename]
-  (let [resource (io/resource filename)]
-    (assert resource (str "Can't find " filename " in classpath"))
-    (evaluate repl-env filename 1 (slurp resource))))
 
 (defn repl-env [& {:keys [host port]}]
   (GnomeEnv. host port (atom #{})))
