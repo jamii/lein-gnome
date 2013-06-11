@@ -50,17 +50,8 @@
     (assert resource (str "Can't find " filename " in classpath"))
     (evaluate repl-env filename 1 (slurp resource))))
 
-(defn repl-env
-  "Create a Node.js REPL environment."
-  [& {:keys [host port]}]
-  (let [base (io/resource "goog/base.js")
-        deps (io/resource "goog/deps.js")
-        new-repl-env (GnomeEnv. host port (atom #{}))]
-    (assert base "Can't find goog/base.js in classpath")
-    (assert deps "Can't find goog/deps.js in classpath")
-    #_(load-resource new-repl-env "goog/base.js")
-    #_(load-resource new-repl-env "goog/deps.js")
-    new-repl-env))
+(defn repl-env [& {:keys [host port]}]
+  (GnomeEnv. host port (atom #{})))
 
 (defn run-gnome-repl [& args]
   (repl/repl (apply repl-env args)))
