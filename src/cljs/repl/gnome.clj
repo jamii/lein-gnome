@@ -2,21 +2,23 @@
   (:require [clojure.java.io :as io]
             [cljs.analyzer :as ana]
             [cljs.repl :as repl]
+            [cljs.closure :as cljsc]
             [clj-http.client :as client]
             [cemerick.piggieback :as piggieback]))
 
+(declare evaluate)
+
 (defn setup [repl-env]
-  (let [env (ana/empty-env)]
-    #_(repl/load-file repl-env "cljs/core.cljs")
-    #_(swap! (:loaded-libs repl-env) conj "cljs.core")
-    #_(repl/evaluate-form repl-env env "<cljs repl>" '(ns cljs.user))))
+  (evaluate repl-env "<cljs repl>" 1
+            (cljsc/-compile
+             '[(ns cljs.user)
+               #_(set! *print-fn* clojure.browser.repl/repl-print)]
+             {})))
 
 (defn repl-url [repl-env]
   (str "http://" (:host repl-env) ":" (:port repl-env) "/evaluate"))
 
 (defn evaluate [repl-env filename line code]
-  (prn "code is:")
-  (prn code)
   (let [body (str {:filename filename :line line :code code})
         response (client/post (repl-url repl-env) {:body body})]
     (if (= 200 (:status response))
