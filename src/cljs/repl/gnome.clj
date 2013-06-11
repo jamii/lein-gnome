@@ -1,6 +1,5 @@
 (ns cljs.repl.gnome
   (:require [clojure.java.io :as io]
-            [cljs.analyzer :as ana]
             [cljs.repl :as repl]
             [cljs.closure :as cljsc]
             [clj-http.client :as client]
@@ -72,20 +71,6 @@
 (defn run-gnome-nrepl [& args]
   (piggieback/cljs-repl :repl-env (apply nrepl-env args)))
 
-;; (def env (repl-env :host "localhost" :port 1080))
-;; (repl-url env)
-;; (evaluate env "foo" 1 "1")
-;; => 1
-;; (load-resource env "goog/base.js")
-;; (repl/evaluate-form env (ana/empty-env) "foo" '(+ 1 1))
-;; => 2
-;; (repl/evaluate-form env (ana/empty-env) "foo" '(conj nil 1))
-;; => (1)
-;; (repl/evaluate-form env (ana/empty-env) "foo" 'conj)
-;; => nil
-;; (repl/evaluate-form env (ana/empty-env) "foo" '*cljs-ns*)
-;; => nil
-;; (repl/load-file env "cljs/core.cljs")
-;; (setup env)
+;; (use 'cljs.repl.gnome)
 ;; (run-gnome-repl :host "localhost" :port 1080)
 ;; (run-gnome-nrepl :host "localhost" :port 1080)
