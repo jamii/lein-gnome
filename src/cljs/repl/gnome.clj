@@ -1,59 +1,76 @@
 (ns cljs.repl.gnome
   (:require [org.httpkit.client :as client]
+            [org.httpkit.server :as server]
             [cljs.repl :as repl]
             [cljs.closure :as cljsc]
             [cemerick.piggieback :as piggieback]))
 
-(declare evaluate)
+(defn repl-url [repl-env command]
+  (str "http://" (:js-host repl-env) ":" (:js-port repl-env) "/" command))
 
-(defn setup [repl-env]
-  (evaluate repl-env "<cljs repl>" 1
-            (cljsc/-compile
-             '[(ns cljs.user)
-               #_(set! *print-fn* clojure.browser.repl/repl-print)]
-             {})))
+(defn post [repl-env command body]
+  @(client/post (repl-url repl-env command) {:body (str body) :as :text}))
 
-(defn repl-url [repl-env]
-  (str "http://" (:host repl-env) ":" (:port repl-env) "/evaluate"))
+(declare -evaluate)
 
-(defn evaluate [repl-env filename line code]
-  (let [body (str {:filename filename :line line :code code})
-        response @(client/post (repl-url repl-env) {:body body :as :text})]
+(defn -setup [repl-env]
+  (post repl-env "setup" (select-keys repl-env [:clj-host :clj-port]))
+  (-evaluate repl-env "<cljs repl>" 1 (cljsc/-compile '[(ns cljs.user)] {})))
+
+(defn -evaluate [repl-env filename line code]
+  (let [response (post repl-env "evaluate" {:filename filename :line line :code code})]
     (if (= 200 (:status response))
       (read-string (:body response))
       {:status :error :value response})))
 
-(defn load [repl-env ns url]
+(defn -load [repl-env ns url]
   (let [missing (remove #(contains? @(:loaded-libs repl-env) %) ns)]
     (when (seq missing)
-      (evaluate repl-env (.toString url) 1 (slurp url))
+      (-evaluate repl-env (.toString url) 1 (slurp url))
       (swap! (:loaded-libs repl-env) (partial apply conj) missing))))
 
-(defn tear-down [repl-env])
+(defn -tear-down [repl-env]
+  (let [server (:server repl-env)]
+    (server) ;; stops the server
+    ))
 
-(defrecord GnomeEnv [host port loaded-libs]
+(defrecord GnomeEnv [js-host js-port clj-host clj-port loaded-libs server]
   repl/IJavaScriptEnv
   (-setup [this]
-    (setup this))
+    (-setup this))
   (-evaluate [this filename line js]
-    (evaluate this filename line js))
+    (-evaluate this filename line js))
   (-load [this ns url]
-    (load this ns url))
+    (-load this ns url))
   (-tear-down [this]
-    (tear-down this)))
+    (-tear-down this)))
 
-(defn repl-env [& {:keys [host port]}]
-  (GnomeEnv. host port (atom #{})))
+(let [out *out*]
+  (defn print-handler [request]
+    (binding [*out* out]
+      ;; for some reason the http-kit server doesn't support {:as :text}
+      (let [bytes (.bytes (:body request))
+            charset (java.nio.charset.Charset/forName "utf8")
+            body (String. bytes 0 (alength bytes) charset)]
+        (prn (read-string body)))
+      {:status 200})))
+
+(defn repl-env [& {:keys [js-host js-port clj-host clj-port]}]
+  (let [server (server/run-server print-handler {:ip clj-host :port clj-port :threads 1})]
+    (GnomeEnv. js-host js-port clj-host clj-port (atom #{}) server)))
 
 (defn run-gnome-repl [& args]
   (repl/repl (apply repl-env args)))
 
 (defn nrepl-env [& args]
-  (setup (apply repl-env args)))
+  (-setup (apply repl-env args)))
 
 (defn run-gnome-nrepl [& args]
   (piggieback/cljs-repl :repl-env (apply nrepl-env args)))
 
 ;; (use 'cljs.repl.gnome)
-;; (run-gnome-repl :host "localhost" :port 1080)
-;; (run-gnome-nrepl :host "localhost" :port 1080)
+;; (def env (repl-env :js-host "localhost" :js-port 1080 :clj-host "localhost" :clj-port 1081))
+;; (select-keys env [:clj-host :clj-port])
+;; (-tear-down env)
+;; (run-gnome-repl :js-host "localhost" :js-port 1080)
+;; (run-gnome-nrepl :js-host "localhost" :js-port 1080)
