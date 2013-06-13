@@ -1,4 +1,5 @@
-(ns hello)
+(ns hello
+  (:require cljs.repl.gnome.server))
 
 (def main js/imports.ui.main)
 
@@ -34,6 +35,7 @@
                             "onComplete" hide-hello))))
 
 (defn init []
+  (cljs.repl.gnome.server/server :js-port 6034)
   (.set_child button icon)
   (.connect button "button-press-event" show-hello))
 

@@ -28,13 +28,25 @@ Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.co
 Use `lein gnome restart` to pick up changes
 ```
 
-The `hello.cljs` file is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
+The `hello.cljs` module is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
 
-# Gotchas
+## REPL
+
+The `hello.cljs` module created by `lein-gnome/lein-template` starts a repl server:
+
+``` clojure
+(cljs.repl.gnome.server/server :js-port 6034)
+```
+
+You can connect to this using:
+
+``` bash
+lein gnome repl :js-port 6034 :clj-port 6044
+```
+
+## Gotchas
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
-
-Coming soon: a repl.
 
 ## License
 

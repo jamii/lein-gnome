@@ -53,4 +53,5 @@ Subtasks: install restart repl nrepl"
   (cond (= task "install") (apply install project args)
         (= task "restart") (apply restart project args)
         (= task "repl") (apply repl project args)
+        (= task "nrepl") (apply repl project args)
         :else (help/help "gnome")))
