@@ -48,6 +48,26 @@ lein gnome repl :js-port 6034 :clj-port 6044
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
+## Resources
+
+Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic.
+
+While cljs output and stacktraces are caught and sent to the repl, printing and stacktraces from js are not. One of `tail -F .xsession-errors`, `tail -F .cache/gdm/session.log` or `journalctl -f` should work.
+
+The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) repl that ships with gnome-shell does not support copy/paste of history and is a modal window. Everything but the picker works better in the cljs repl.
+
+Gnome libraries in gjs are dynamically loaded on demand. This makes tab completion in Looking Glass  more or less useless. Rely on the gnome docs instead. Dynamic loading also interacts strangely with cljs eg typing `js/imports` in the cljs repl will throw an exception but `js/imports.gi.Soup` will not. More on this later...
+
+[Debugging gnome-shell](https://live.gnome.org/GnomeShell/Debugging)
+
+[Extension faq](https://live.gnome.org/GnomeShell/Extensions/FAQ)
+
+[Gjs examples](https://git.gnome.org/browse/gjs/tree/examples/)
+
+[Inspect dbus intefaces](https://live.gnome.org/DFeet/)
+
+[Cljs <-> js cheat sheet](http://himera.herokuapp.com/synonym.html)
+
 ## License
 
 Copyright © 2012 Phil Hagelberg
