@@ -1,4 +1,4 @@
-(ns cljs.repl.gnome
+(ns cljs.repl.gnome.client
   (:require [org.httpkit.client :as client]
             [org.httpkit.server :as server]
             [cljs.repl :as repl]
