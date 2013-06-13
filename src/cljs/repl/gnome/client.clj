@@ -55,7 +55,11 @@
         (prn (read-string body)))
       {:status 200})))
 
-(defn repl-env [& {:keys [js-host js-port clj-host clj-port]}]
+(defn repl-env [& {:keys [js-host js-port clj-host clj-port]
+                   :or {js-host "localhost"
+                        js-port 6034
+                        clj-host "localhost"
+                        clj-port 6044}}]
   (let [server (server/run-server print-handler {:ip clj-host :port clj-port :threads 1})]
     (GnomeEnv. js-host js-port clj-host clj-port (atom #{}) server)))
 

@@ -4,7 +4,8 @@
             [clojure.java.shell :as sh]
             [leiningen.help :as help]
             [leiningen.core.main :as main]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [cljs.repl.gnome.client :as client]))
 
 (defn shell-version [project]
   (get-in project [:gnome-shell :supported-versions]))
@@ -38,11 +39,18 @@
 (defn restart [project & args]
   (eval-in-shell "global.reexec_self()"))
 
+(defn repl [project & args]
+  (apply client/run-gnome-repl args))
+
+(defn nrepl [project & args]
+  (apply client/run-gnome-nrepl args))
+
 (defn gnome
   "Operate on Gnome Shell extensions.
 
-Subtasks: install restart"
+Subtasks: install restart repl nrepl"
   [project & [task args]]
   (cond (= task "install") (apply install project args)
         (= task "restart") (apply restart project args)
+        (= task "repl") (apply repl project args)
         :else (help/help "gnome")))

@@ -37,9 +37,10 @@
     (set! (.-status_code msg) 200)
     (.. msg -response_body (append (pr-str result)))))
 
-(defn server []
+(defn server [& {:keys [js-port]
+                 :or {js-port 6034}}]
   (let [config (atom {})
-        server (new js/imports.gi.Soup.Server (js-obj "port" 1080))]
+        server (new js/imports.gi.Soup.Server (js-obj "port" js-port))]
     (.add_handler server "/setup" (partial setup-handler config))
     (.add_handler server "/evaluate" evaluate-handler)
     (.run_async server)
