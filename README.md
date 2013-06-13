@@ -1,10 +1,14 @@
-# lein-gnome
-
 Bringing the magic of ClojureScript to the desktop via Gnome Shell extensions.
 
-## Usage
+Note: currently the version of lein-gnome on clojars is from technomancy's repo. To use this fork you must do:
 
-Put `lein-gnome/lein-template` in your profile:
+```
+git clone https://github.com/jamii/lein-gnome.git
+cd lein-gnome
+lein install
+```
+
+## Template
 
 ``` bash
 $ cat ~/.lein/profiles.clj
@@ -15,8 +19,8 @@ $ tree
 .
 ├── project.clj
 └── src
-├── hello.cljs
-└── stylesheet.css
+ ├── hello.cljs
+ └── stylesheet.css
 1 directory, 3 files
 $ lein cljsbuild once
 [...]
@@ -28,7 +32,7 @@ Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.co
 Use `lein gnome restart` to pick up changes
 ```
 
-The `hello.cljs` module is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
+The template is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
 
 ## REPL
 
