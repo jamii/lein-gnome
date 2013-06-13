@@ -58,7 +58,7 @@ Gjs is not documented but the c libraries are. [This guide](http://mathematicalc
 
 While cljs output and stacktraces are caught and sent to the repl, printing and stacktraces from js are not. One of `tail -F .xsession-errors`, `tail -F .cache/gdm/session.log` or `journalctl -f` should work.
 
-The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) repl that ships with gnome-shell does not support copy/paste of history and is a modal window. Everything but the picker works better in the cljs repl.
+The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) that ships with gnome-shell does not support copy/paste of history and runs a modal window. Everything but the picker works better in the cljs repl. The picker may appear in a later version of lein-gnome.
 
 Gnome libraries in gjs are dynamically loaded on demand. This makes tab completion in Looking Glass  more or less useless. Rely on the gnome docs instead. Dynamic loading also interacts strangely with cljs eg typing `js/imports` in the cljs repl will throw an exception but `js/imports.gi.Soup` will not. More on this later...
 
