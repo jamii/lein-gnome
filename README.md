@@ -54,7 +54,7 @@ As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least 
 
 ## Resources
 
-Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic.
+Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic, in which case reading the [js source](https://git.gnome.org/browse/gnome-shell/tree/js) can be enlightening.
 
 While cljs output and stacktraces are caught and sent to the repl, printing and stacktraces from js are not. One of `tail -F .xsession-errors`, `tail -F .cache/gdm/session.log` or `journalctl -f` should work.
 
@@ -71,6 +71,8 @@ Gnome libraries in gjs are dynamically loaded on demand. This makes tab completi
 [Inspect dbus intefaces](https://live.gnome.org/DFeet/)
 
 [Old UI overview](http://mathematicalcoffee.blogspot.de/2012/09/gnome-shell-javascript-source.html)
+
+[Guidelines for having extensions accepted on the official site](http://blog.mecheye.net/2012/02/requirements-and-tips-for-getting-your-gnome-shell-extension-approved/)
 
 [Cljs <-> js cheat sheet](http://himera.herokuapp.com/synonym.html)
 
