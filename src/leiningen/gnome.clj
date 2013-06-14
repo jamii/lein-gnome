@@ -19,24 +19,49 @@
                 :shell-version (shell-version project)
                 :uuid (uuid project)}))
 
-;; TODO add 'uninstall/clean' command
+(defn dbus-send [command & args]
+  (apply sh/sh "dbus-send" "--session" "--type=method_call" "--dest=org.gnome.Shell" "/org/gnome/Shell" command args))
 
-(defn install [project & args]
+(defn eval-in-shell [code]
+  (dbus-send "org.gnome.Shell.Eval" (str "string:" code)))
+
+(defn reload [project]
+  (println "Reloading...")
+  (dbus-send "org.gnome.Shell.Extensions.ReloadExtension"(str "string:" (uuid project))))
+
+(defn enable [project]
+  (println "Enabling...")
+  (eval-in-shell (str "Main.ExtensionSystem.enableExtension('" (uuid project) "')")))
+
+(defn disable [project]
+  (println "Disabling...")
+  (eval-in-shell (str "Main.ExtensionSystem.disableExtension('" (uuid project) "')")))
+
+;; TODO figure out why this doesnt work
+(defn check-errors [project]
+  (println "Checking for errors... this doesnt actually work yet :(")
+  (dbus-send "org.gnome.Shell.Extensions.GetExtensionErrors" (str "string:" (uuid project))))
+
+(defn install [project]
   (let [install-dir (format "%s/.local/share/gnome-shell/extensions/%s"
                             (System/getProperty "user.home") (uuid project))]
+    (println "Installing to" install-dir "...")
     (.mkdirs (io/file install-dir))
     (spit (io/file install-dir "metadata.json") (metadata project))
     (io/copy (io/file (get-in project [:gnome-shell :extension]))
              (io/file install-dir "extension.js"))
     (io/copy (io/file (get-in project [:gnome-shell :stylesheet]))
              (io/file install-dir "stylesheet.css"))
-    (println "Installed extension to" install-dir)
-    (println "Use `lein gnome restart` to pick up changes")))
+    (enable project)
+    (reload project)
+    (check-errors project)))
 
-(defn eval-in-shell [code]
-  (sh/sh "dbus-send" "--session" "--type=method_call" "--dest=org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell.Eval" (str "string:" code)))
+(defn uninstall [project]
+  (println "Uninstalling...")
+  (dbus-send "org.gnome.Shell.Extensions.UninstallExtension" (str "string:" (uuid project))))
 
-(defn restart [project & args]
+(defn restart []
+  (println "Restarting...")
   (eval-in-shell "global.reexec_self()"))
 
 (defn repl [project & args]
@@ -48,10 +73,23 @@
 (defn gnome
   "Operate on Gnome Shell extensions.
 
-Subtasks: install restart repl nrepl"
+Subtasks:
+  install
+  uninstall
+  enable
+  disable
+  reload
+  restart
+  repl
+  nrepl (currently broken)"
   [project & [task args]]
-  (cond (= task "install") (apply install project args)
-        (= task "restart") (apply restart project args)
-        (= task "repl") (apply repl project args)
-        (= task "nrepl") (apply repl project args)
-        :else (help/help "gnome")))
+  (condp = task
+    "install" (install project)
+    "uninstall" (uninstall project)
+    "enable" (enable project)
+    "disable" (disable project)
+    "reload" (reload project)
+    "restart" (restart)
+    "repl" (apply repl project args)
+    "nrepl" (apply repl project args)
+    (help/help "gnome")))
