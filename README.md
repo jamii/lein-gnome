@@ -70,6 +70,8 @@ Gnome libraries in gjs are dynamically loaded on demand. This makes tab completi
 
 [Inspect dbus intefaces](https://live.gnome.org/DFeet/)
 
+[Old UI overview](http://mathematicalcoffee.blogspot.de/2012/09/gnome-shell-javascript-source.html)
+
 [Cljs <-> js cheat sheet](http://himera.herokuapp.com/synonym.html)
 
 ## License
