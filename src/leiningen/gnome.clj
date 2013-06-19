@@ -29,7 +29,7 @@
 
 (defn reload [project]
   (println "Reloading...")
-  (dbus-send "org.gnome.Shell.Extensions.ReloadExtension"(str "string:" (uuid project))))
+  (dbus-send "org.gnome.Shell.Extensions.ReloadExtension" (str "string:" (uuid project))))
 
 (defn enable [project]
   (println "Enabling...")
@@ -41,7 +41,7 @@
 
 ;; TODO figure out why this doesnt work
 (defn check-errors [project]
-  (println "Checking for errors... this doesnt actually work yet :(")
+  (println "Checking for errors... (this doesnt actually work yet)")
   (dbus-send "org.gnome.Shell.Extensions.GetExtensionErrors" (str "string:" (uuid project))))
 
 (defn install [project]
