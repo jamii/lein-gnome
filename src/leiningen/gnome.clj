@@ -20,7 +20,9 @@
                 :uuid (uuid project)}))
 
 (defn dbus-send [command & args]
-  (apply sh/sh "dbus-send" "--session" "--type=method_call" "--dest=org.gnome.Shell" "/org/gnome/Shell" command args))
+  (let [{:keys [out err]} (apply sh/sh "dbus-send" "--session" "--type=method_call" "--dest=org.gnome.Shell" "/org/gnome/Shell" command args)]
+    (when (seq out) (println out))
+    (when (seq err) (println err))))
 
 (defn eval-in-shell [code]
   (dbus-send "org.gnome.Shell.Eval" (str "string:" code)))
