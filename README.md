@@ -69,6 +69,8 @@ dbus-monitor "interface='org.gnome.Shell.Extensions'" | grep $MY-PROJECT-UUID
 
 The first three are not filtered because many of the errors you can cause will not include the uuid of your extension.
 
+Expect to see lots of errors when starting `lein gnome log` since not all of the sources will exist on your machine.
+
 ## Gotchas
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
