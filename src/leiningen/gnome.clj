@@ -67,22 +67,21 @@
 (defn repl [project & args]
   (apply client/run-gnome-repl args))
 
-(defn print-stream [filter stream]
-  (doseq [line (line-seq (io/reader stream))]
-    (when (or (nil? filter) (.contains line filter))
-      (println line))))
+(defn print-stream [stream]
+  (doseq [line (line-seq (io/reader stream))] (println line)))
 
-(defn print-output-of [filter & commands]
+(defn print-output-of [commands]
   (let [process (.. Runtime getRuntime (exec (into-array String commands)))]
-    (future (print-stream filter (.getErrorStream process)))
+    (future (print-stream (.getErrorStream process)))
     ;; .getInputStream returns the stdout stream :(
-    (future (print-stream filter (.getInputStream process)))))
+    (future (print-stream (.getInputStream process))))
 
 (defn log [project]
-  (print-output-of nil "journalctl" "-q" "-f" "-n" "0" "_COMM=gnome-session")
-  (print-output-of nil "tail" "-F" ".xsession-errors")
-  (print-output-of nil "tail" "-F" ".cache/gdm/session.log")
-  (print-output-of (uuid project) "dbus-monitor" "interface='org.gnome.Shell.Extensions'")
+  (print-output-of "journalctl" "-q" "-f" "-n" "0" "_COMM=gnome-session")
+  (print-output-of "tail" "-F" ".xsession-errors")
+  (print-output-of "tail" "-F" ".cache/gdm/session.log")
+  (print-output-of "dbus-monitor" "interface='org.gnome.Shell.Extensions'")
+  ;; wait for C-c
   (.join (Thread/currentThread)))
 
 (defn gnome
