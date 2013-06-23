@@ -11,7 +11,7 @@
   (get-in project [:gnome-shell :uuid]))
 
 (defn metadata [project]
-  (json/encode {:name (:name project)
+  (json/encode {:name (get-in project [:gnome-shell :name])
                 :description (:description project)
                 :shell-version (get-in project [:gnome-shell :supported-versions])
                 :uuid (uuid project)}))
