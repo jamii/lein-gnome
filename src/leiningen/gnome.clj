@@ -36,11 +36,6 @@
   (println "Disabling...")
   (eval-in-shell (str "Main.ExtensionSystem.disableExtension('" (uuid project) "')")))
 
-;; TODO figure out why this doesnt work
-(defn check-errors [project]
-  (println "Checking for errors... (this doesnt actually work yet)")
-  (dbus-send "org.gnome.Shell.Extensions.GetExtensionErrors" (str "string:" (uuid project))))
-
 (defn install [project]
   (let [install-dir (format "%s/.local/share/gnome-shell/extensions/%s"
                             (System/getProperty "user.home") (uuid project))
@@ -53,8 +48,7 @@
     (io/copy (io/file extension) (io/file install-dir "extension.js"))
     (io/copy (io/file stylesheet) (io/file install-dir "stylesheet.css"))
     (enable project)
-    (reload project)
-    (check-errors project)))
+    (reload project)))
 
 (defn uninstall [project]
   (println "Uninstalling...")
