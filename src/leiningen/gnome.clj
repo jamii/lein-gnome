@@ -69,9 +69,6 @@
 (defn repl [project & args]
   (apply client/run-gnome-repl args))
 
-(defn nrepl [project & args]
-  (apply client/run-gnome-nrepl args))
-
 (defn gnome
   "Operate on Gnome Shell extensions.
 
