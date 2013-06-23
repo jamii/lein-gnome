@@ -54,7 +54,7 @@ If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-rep
 (cljs.gnome.repl.client/run-gnome-nrepl :js-port 6034 :clj-port 6044)
 ```
 
-The repl is currently somewhat limited. You may only have one client connected to a given extension at a time. If you restart the extension you must also restart the repl. Syntax errors will crash the entire repl (this appears to be the fault of cljs.repl).
+The repl is currently somewhat limited. You may only have one client connected to a given extension at a time. If you restart the extension you must also restart the repl. Syntax errors will crash the entire repl (as far as I can tell this is the fault of cljs.repl).
 
 ## Gotchas
 
