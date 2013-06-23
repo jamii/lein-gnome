@@ -93,10 +93,10 @@ Subtasks:
   uninstall
   enable
   disable
-  reload
-  restart
-  repl
-  log
+  reload (restarts your extension)
+  restart (restarts gnome-shell)
+  repl :js-host localhost :js-port 6034 :clj-host localhost :clj-port 6044
+  log (tails the gnome-session logs)
   metadata"
   [project & [task args]]
   (condp = task
@@ -109,4 +109,4 @@ Subtasks:
     "repl" (apply repl project args)
     "log" (log project)
     "metadata" (println (metadata project))
-    (help/help "gnome")))
+    (println (help/help-for "gnome"))))
