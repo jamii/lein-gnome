@@ -75,7 +75,11 @@ Expect to see lots of errors when starting `lein gnome log` since not all of the
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
+If an exception is thrown in your `init` or `enable` functions, your extension will not start. If this happens when (re)starting gnome-shell then the error will be logged and will also appear in Looking Glass under the extensions tab. If this happens when reloading the extension the error will be silently discarded.
+
 If an exception is thrown in your `disable` function, reloading your extension will silently fail. The error will not even be logged. Try calling the disable function manually in the repl to be sure.
+
+There is a GetExtensionErrors dbus method exposed by gnome-shell but it never returns anything.
 
 In general gjs seems happy to throw away exceptions. Please let me know if you find more cases like the above and I will start adding wrappers to deal with them.
 
