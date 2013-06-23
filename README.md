@@ -45,7 +45,7 @@ The `hello.cljs` module created by `lein-gnome/lein-template` starts a repl serv
 You can connect to this using:
 
 ``` bash
-lein gnome repl :js-port 6034 :clj-port 6044
+rlwrap lein gnome repl :js-port 6034 :clj-port 6044
 ```
 
 If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}` in your `project.clj` you can also start the repl from inside an existing nrepl using:
