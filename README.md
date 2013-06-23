@@ -75,6 +75,10 @@ Expect to see lots of errors when starting `lein gnome log` since not all of the
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
 
+If an exception is thrown in your `disable` function, reloading your extension will silently fail. The error will not even be logged. Try calling the disable function manually in the repl to be sure.
+
+In general gjs seems happy to throw away exceptions. Please let me know if you find more cases like the above and I will start adding wrappers to deal with them.
+
 ## Resources
 
 Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic, in which case reading the [js source](https://git.gnome.org/browse/gnome-shell/tree/js) can be enlightening.
