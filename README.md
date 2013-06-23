@@ -50,7 +50,7 @@ lein gnome repl :js-port 6034 :clj-port 6044
 
 If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}` in your `project.clj` you can also start the repl from inside an existing nrepl using:
 
-```
+``` clojure
 (cljs.gnome.repl.client/run-gnome-nrepl :js-port 6034 :clj-port 6044)
 ```
 
