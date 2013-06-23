@@ -52,7 +52,11 @@
       (let [bytes (.bytes (:body request))
             charset (java.nio.charset.Charset/forName "utf8")
             body (String. bytes 0 (alength bytes) charset)]
-        (prn (read-string body)))
+        (try (prn (read-string body))
+         (catch Exception e
+           (if (string? body)
+             (println body)
+             (prn nil)))))
       {:status 200})))
 
 (defn repl-env [& {:keys [js-host js-port clj-host clj-port]
