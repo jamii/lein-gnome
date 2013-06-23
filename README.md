@@ -54,6 +54,8 @@ If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-rep
 (cljs.gnome.repl.client/run-gnome-nrepl :js-port 6034 :clj-port 6044)
 ```
 
+The repl is currently somewhat limited. You may only have one client connected to a given extension at a time. If you restart the extension you must also restart the repl. Syntax errors will crash the entire repl (this appears to be the fault of cljs.repl).
+
 ## Gotchas
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
