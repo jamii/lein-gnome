@@ -82,8 +82,7 @@ Subtasks:
   disable
   reload
   restart
-  repl
-  nrepl (currently broken)"
+  repl"
   [project & [task args]]
   (condp = task
     "install" (install project)
@@ -93,5 +92,4 @@ Subtasks:
     "reload" (reload project)
     "restart" (restart)
     "repl" (apply repl project args)
-    "nrepl" (apply repl project args)
     (help/help "gnome")))

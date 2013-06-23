@@ -66,15 +66,7 @@
 (defn run-gnome-repl [& args]
   (repl/repl (apply repl-env args)))
 
-(defn nrepl-env [& args]
-  (-setup (apply repl-env args)))
-
 (defn run-gnome-nrepl [& args]
-  (piggieback/cljs-repl :repl-env (apply nrepl-env args)))
-
-;; (use 'cljs.repl.gnome)
-;; (def env (repl-env :js-host "localhost" :js-port 1080 :clj-host "localhost" :clj-port 1081))
-;; (select-keys env [:clj-host :clj-port])
-;; (-tear-down env)
-;; (run-gnome-repl :js-host "localhost" :js-port 1080)
-;; (run-gnome-nrepl :js-host "localhost" :js-port 1080)
+  (piggieback/cljs-repl
+   :repl-env (doto (apply repl-env args) -setup)
+   :eval piggieback/cljs-eval))

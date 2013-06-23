@@ -48,6 +48,12 @@ You can connect to this using:
 lein gnome repl :js-port 6034 :clj-port 6044
 ```
 
+If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}` in your `project.clj` you can also start the repl from inside an existing nrepl using:
+
+```
+(cljs.gnome.repl.client/run-gnome-nrepl :js-port 6034 :clj-port 6044)
+```
+
 ## Gotchas
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
