@@ -54,7 +54,20 @@ If you have `:repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-rep
 (cljs.gnome.repl.client/run-gnome-nrepl :js-port 6034 :clj-port 6044)
 ```
 
-The repl is currently somewhat limited. You may only have one client connected to a given extension at a time. If you restart the extension you must also restart the repl. Syntax errors will crash the entire repl (as far as I can tell this is the fault of cljs.repl).
+The repl is currently somewhat limited. You may only have one client connected to a given extension at a time. If you restart the extension you must also restart the repl. Syntax errors will crash the entire repl (as far as I can tell this is the fault of cljs.repl). There is no way to interrupt evaluation since the evalution environment is single-threaded.
+
+## Logs
+
+Output from your extension (with the exception of cljs print functions called inside the repl) is sent to the gnome-session log. Where this is depends on your linux distribution, your version of gnome-shell and the alignment of pluto. Calling `lein gnome log` combines all of:
+
+``` bash
+tail -F .xsession-errors
+tail -F .cache/gdm/session.log
+journalctl -fqn 0 _COMM=gnome-session
+dbus-monitor "interface='org.gnome.Shell.Extensions'" | grep $MY-PROJECT-UUID
+```
+
+The first three are not filtered because many of the errors you can cause will not include the uuid of your extension.
 
 ## Gotchas
 
@@ -64,11 +77,9 @@ As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least 
 
 Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic, in which case reading the [js source](https://git.gnome.org/browse/gnome-shell/tree/js) can be enlightening.
 
-While cljs output and stacktraces are caught and sent to the repl, printing and stacktraces from js are not. One of `tail -F .xsession-errors`, `tail -F .cache/gdm/session.log` or `journalctl -f` should work.
-
 The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) that ships with gnome-shell does not support copy/paste of history and runs a modal window. Everything but the picker works better in the cljs repl. The picker may appear in a later version of lein-gnome.
 
-Gnome libraries in gjs are dynamically loaded on demand. This makes tab completion in Looking Glass  more or less useless. Rely on the gnome docs instead. Dynamic loading also interacts strangely with cljs eg typing `js/imports` in the cljs repl will throw an exception but `js/imports.gi.Soup` will not. More on this later...
+Gnome libraries in gjs are dynamically loaded on demand. This makes tab completion in Looking Glass more or less useless. Rely on the gnome docs instead. Dynamic loading also interacts strangely with cljs eg typing `js/imports` in the cljs repl will throw an exception but `js/imports.gi.Soup` will not. More on this later...
 
 [Debugging gnome-shell](https://live.gnome.org/GnomeShell/Debugging)
 
