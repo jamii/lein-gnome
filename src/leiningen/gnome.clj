@@ -7,16 +7,13 @@
             [cheshire.core :as json]
             [cljs.repl.gnome.client :as client]))
 
-(defn shell-version [project]
-  (get-in project [:gnome-shell :supported-versions]))
-
 (defn uuid [project]
-  (format "%s@%s" (:name project) (:group project)))
+  (get-in project [:gnome-shell :uuid]))
 
 (defn metadata [project]
   (json/encode {:name (:name project)
                 :description (:description project)
-                :shell-version (shell-version project)
+                :shell-version (get-in project [:gnome-shell :supported-versions])
                 :uuid (uuid project)}))
 
 (defn dbus-send [command & args]
@@ -46,14 +43,15 @@
 
 (defn install [project]
   (let [install-dir (format "%s/.local/share/gnome-shell/extensions/%s"
-                            (System/getProperty "user.home") (uuid project))]
+                            (System/getProperty "user.home") (uuid project))
+        {:keys [extension stylesheet]} (:gnome-shell project)]
     (println "Installing to" install-dir "...")
+    (assert (and extension (.exists (io/file extension))) (str "Could not find extension at " (prn-str extension)))
+    (assert (and stylesheet (.exists (io/file stylesheet))) (str "Could not find stylesheet at " (prn-str stylesheet)))
     (.mkdirs (io/file install-dir))
     (spit (io/file install-dir "metadata.json") (metadata project))
-    (io/copy (io/file (get-in project [:gnome-shell :extension]))
-             (io/file install-dir "extension.js"))
-    (io/copy (io/file (get-in project [:gnome-shell :stylesheet]))
-             (io/file install-dir "stylesheet.css"))
+    (io/copy (io/file extension) (io/file install-dir "extension.js"))
+    (io/copy (io/file stylesheet) (io/file install-dir "stylesheet.css"))
     (enable project)
     (reload project)
     (check-errors project)))
@@ -98,7 +96,8 @@ Subtasks:
   reload
   restart
   repl
-  log"
+  log
+  metadata"
   [project & [task args]]
   (condp = task
     "install" (install project)
@@ -109,4 +108,5 @@ Subtasks:
     "restart" (restart)
     "repl" (apply repl project args)
     "log" (log project)
+    "metadata" (println (metadata project))
     (help/help "gnome")))
