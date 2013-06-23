@@ -86,6 +86,6 @@ Gnome libraries in gjs are dynamically loaded on demand. This makes tab completi
 
 ## License
 
-Copyright © 2012 Phil Hagelberg
+Copyright © 2012 Phil Hagelberg, Jamie Brandon
 
 Distributed under the Eclipse Public License, the same as Clojure.
