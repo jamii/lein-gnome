@@ -64,7 +64,7 @@
 (defn print-stream [stream]
   (doseq [line (line-seq (io/reader stream))] (println line)))
 
-(defn print-output-of [commands]
+(defn print-output-of [& commands]
   (let [process (.. Runtime getRuntime (exec (into-array String commands)))]
     (future (print-stream (.getErrorStream process)))
     ;; .getInputStream returns the stdout stream :(
