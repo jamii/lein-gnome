@@ -16,10 +16,10 @@
 
 (defn eval-here [code]
   (try {:status :success :value (js* "eval(~{code})")}
-       (catch js/Error e
-         {:status :exception :value (pr-str e)
-          :stacktrace (if (.hasOwnProperty e "stack")
-                        (.-stack e)
+       (catch js/Object exc
+         {:status :exception :value (pr-str exc)
+          :stacktrace (if (.hasOwnProperty exc "stack")
+                        (.-stack exc)
                         "No stacktrace available.")})))
 
 (defn setup-handler [config server msg path query client]
