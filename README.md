@@ -1,18 +1,12 @@
 Bringing the magic of ClojureScript to the desktop via Gnome Shell extensions.
 
-Note: currently the version of lein-gnome on clojars is from technomancy's repo. To use this fork you must do:
-
-```
-git clone https://github.com/jamii/lein-gnome.git
-cd lein-gnome
-lein install
-```
-
 ## Template
+
+The included template is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
 
 ``` bash
 $ cat ~/.lein/profiles.clj
-{:user {:plugins [[lein-gnome/lein-template "0.1.0-SNAPSHOT"]]}}
+{:user {:plugins [[lein-gnome/lein-template "0.1.0"]]}}
 $ lein new lein-gnome myextension example.com
 $ cd myextension/
 $ tree
@@ -28,11 +22,12 @@ Compiling ClojureScript.
 Compiling "/tmp/myextension/target/extension/extension.js" from "src"...
 Successfully compiled "[...]/extension.js" in 6.107488105 seconds.
 $ lein gnome install
-Copied extension to ~/.local/share/gnome-shell/extensions/myextension@example.com directory.
-Use `lein gnome restart` to pick up changes
+Installing to /home/jamie/.local/share/gnome-shell/extensions/myextension@example.com ...
+Enabling...
+Reloading...
 ```
 
-The template is a direct port of the example extension created by `gnome-shell-extension-tool --create-extension`.
+If all went well there should now be a new icon in your top-right panel.
 
 ## REPL
 
@@ -64,10 +59,10 @@ Output from your extension (with the exception of cljs print functions called in
 tail -F .xsession-errors
 tail -F .cache/gdm/session.log
 journalctl -fqn 0 _COMM=gnome-session
-dbus-monitor "interface='org.gnome.Shell.Extensions'" | grep $MY-PROJECT-UUID
+dbus-monitor "interface='org.gnome.Shell.Extensions'"
 ```
 
-The first three are not filtered because many of the errors you can cause will not include the uuid of your extension.
+The is necessarily noisy because many of the errors you can cause will not include the uuid of your extension.
 
 Expect to see lots of errors when starting `lein gnome log` since not all of the sources will exist on your machine.
 
@@ -89,7 +84,7 @@ The gnome-shell has a nasty habit of not logging errors thrown by your `init`, `
 
 Gjs is not documented but the c libraries are. [This guide](http://mathematicalcoffee.blogspot.com/2012/09/developing-gnome-shell-extensions.html) explains the mapping between c names and gjs names. Bear in mind though that some c libs (eg libsoup) are not direct bindings in gjs but have been modified to be more idiomatic, in which case reading the [js source](https://git.gnome.org/browse/gnome-shell/tree/js) can be enlightening.
 
-The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) that ships with gnome-shell does not support copy/paste of history and runs a modal window. Everything but the picker works better in the cljs repl. The picker may appear in a later version of lein-gnome.
+The [Looking Glass repl](https://live.gnome.org/GnomeShell/LookingGlass) that ships with gnome-shell does not support copy/paste of history and runs in a modal window. Everything but the picker works better in the cljs repl. The picker may appear in a later version of lein-gnome.
 
 Gnome libraries in gjs are dynamically loaded on demand. This makes tab completion in Looking Glass more or less useless. Rely on the gnome docs instead. Dynamic loading also interacts strangely with cljs eg typing `js/imports` in the cljs repl will throw an exception but `js/imports.gi.Soup` will not. More on this later...
 
