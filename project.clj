@@ -1,4 +1,4 @@
-(defproject lein-gnome "0.1.0-SNAPSHOT"
+(defproject lein-gnome "0.1.0"
   :description "Bringing the magic of ClojureScript to the desktop."
   :url "https://github.com/jamii/lein-gnome"
   :license {:name "Eclipse Public License"
