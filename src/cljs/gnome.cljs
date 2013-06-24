@@ -9,7 +9,9 @@
         (js/log (str "Error in " name) exc)
         (js/log (if (.hasOwnProperty exc "stack")
                         (.-stack exc)
-                        "No stacktrace available."))))))
+                        "No stacktrace available."))))
+    nil ;; Without this nil we get "TypeError: extension.stateObj.enable is not a function"
+    ))
 
 (defn defextension! [self & {:keys [init enable disable]}]
   (set! (.-init self) (log-errors "init" init))
