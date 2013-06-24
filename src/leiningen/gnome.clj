@@ -68,7 +68,7 @@
   (let [process (.. Runtime getRuntime (exec (into-array String commands)))]
     (future (print-stream (.getErrorStream process)))
     ;; .getInputStream returns the stdout stream :(
-    (future (print-stream (.getInputStream process))))
+    (future (print-stream (.getInputStream process)))))
 
 (defn log [project]
   (print-output-of "journalctl" "-q" "-f" "-n" "0" "_COMM=gnome-session")
