@@ -1,5 +1,6 @@
 (ns hello
-  (:require cljs.repl.gnome.server))
+  (:require [cljs.gnome :refer [defextension!]]
+            cljs.repl.gnome.server))
 
 (def main js/imports.ui.main)
 
@@ -34,18 +35,22 @@
                             "transition" "easeOutQuad"
                             "onComplete" hide-hello))))
 
+(def server (atom nil))
+
 (defn init []
-  (cljs.repl.gnome.server/server :js-port 6034)
   (.set_child button icon)
   (.connect button "button-press-event" show-hello))
 
 (defn enable []
+  (compare-and-set! server nil (cljs.repl.gnome.server/server))
   (.. main -panel -_rightBox (insert_child_at_index button 0)))
 
 (defn disable []
+  (swap! server #(.disconnect %))
   (.. main -panel -_rightBox (remove_child button)))
 
 (this-as self
-         (set! (.-init self) (fn [] (init) nil))
-         (set! (.-enable self) enable)
-         (set! (.-disable self) disable))
+         (defextension! self
+           :init init
+           :enable enable
+           :disable disable))
