@@ -71,6 +71,14 @@ The first three are not filtered because many of the errors you can cause will n
 
 Expect to see lots of errors when starting `lein gnome log` since not all of the sources will exist on your machine.
 
+You will also see a lot of `JS ERROR: !!!   WARNING: 'variable self__ redeclares argument'`. That is because cljs generates lots of code like this:
+
+``` javascript
+cljs.core.PersistentTreeSet.prototype.apply = function(self__, args4038) {
+  var self__ = this;
+  ...
+```
+
 ## Gotchas
 
 As of Gnome Shell 3.8.2 if your group name (example.com) does not have at least one period in it your extension will not be recognised.
