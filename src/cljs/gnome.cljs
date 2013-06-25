@@ -13,7 +13,8 @@
     nil ;; Without this nil we get "TypeError: extension.stateObj.enable is not a function"
     ))
 
-(defn defextension! [self & {:keys [init enable disable]}]
-  (set! (.-init self) (log-errors "init" init))
-  (set! (.-enable self) (log-errors "enable" enable))
-  (set! (.-disable self) (log-errors "disable" disable)))
+(defn defextension! [{:keys [init enable disable]}]
+  (this-as self
+           (set! (.-init self) (log-errors "init" init))
+           (set! (.-enable self) (log-errors "enable" enable))
+           (set! (.-disable self) (log-errors "disable" disable))))
